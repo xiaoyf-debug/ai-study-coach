@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 学习规划与复盘助手</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header><div><span class="eyebrow">AI STUDY COACH</span><h1>把目标变成今天能完成的行动</h1><p>制定计划、记录专注过程，并根据真实完成情况持续复盘。</p></div><span id="modeBadge" class="badge">本地模式</span></header>
+  <main>
+    <section class="panel hero-panel">
+      <div><h2>本周目标</h2><p id="goalPreview">还没有设置目标</p></div>
+      <button id="openGoal">制定学习计划</button>
+    </section>
+
+    <div class="metrics">
+      <article><strong id="completionRate">0%</strong><span>今日完成率</span></article>
+      <article><strong id="focusMinutes">0</strong><span>累计专注分钟</span></article>
+      <article><strong id="streakDays">0</strong><span>连续记录天数</span></article>
+    </div>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="section-title"><div><span class="eyebrow">TODAY</span><h2>今日任务</h2></div><button class="secondary" id="addTask">添加任务</button></div>
+        <div id="taskList" class="task-list"></div>
+      </section>
+      <aside class="panel coach-card">
+        <span class="eyebrow">COACH</span><h2>学习教练建议</h2>
+        <p id="coachText">先设置一个具体目标，我会根据任务和记录给出下一步建议。</p>
+        <button id="refreshAdvice">生成建议</button>
+      </aside>
+    </div>
+
+    <section class="panel">
+      <div class="section-title"><div><span class="eyebrow">REVIEW</span><h2>学习记录与复盘</h2></div><button class="secondary" id="addSession">记录学习</button></div>
+      <div id="sessionList" class="session-list"></div>
+      <div class="summary"><h3>阶段总结</h3><p id="summaryText">完成学习记录后，这里会汇总投入时间、完成情况和下一步重点。</p></div>
+    </section>
+  </main>
+
+  <dialog id="goalDialog"><form method="dialog"><h2>制定学习计划</h2><label>学习目标<input id="goalTitle" placeholder="例如：两周内掌握 C++ 指针与结构体"></label><label>截止日期<input id="goalDeadline" type="date"></label><label>每日可用时间（分钟）<input id="dailyMinutes" type="number" min="15" value="90"></label><label>当前基础<textarea id="goalContext" placeholder="描述已经掌握的内容和主要困难"></textarea></label><div class="actions"><button value="cancel" class="secondary">取消</button><button value="default" id="saveGoal">生成计划</button></div></form></dialog>
+  <dialog id="taskDialog"><form method="dialog"><h2>添加任务</h2><label>任务内容<input id="taskTitle" placeholder="例如：完成 5 道指针练习题"></label><label>预计用时（分钟）<input id="taskMinutes" type="number" min="5" value="30"></label><div class="actions"><button value="cancel" class="secondary">取消</button><button value="default" id="saveTask">保存任务</button></div></form></dialog>
+  <dialog id="sessionDialog"><form method="dialog"><h2>记录本次学习</h2><label>学习内容<input id="sessionTitle" placeholder="例如：复习数组与指针"></label><label>实际用时（分钟）<input id="sessionMinutes" type="number" min="1" value="30"></label><label>掌握情况<select id="sessionStatus"><option>掌握良好</option><option>基本理解</option><option>仍需复习</option></select></label><label>学习记录<textarea id="sessionNote" placeholder="记录收获、问题或下一步行动"></textarea></label><div class="actions"><button value="cancel" class="secondary">取消</button><button value="default" id="saveSession">保存记录</button></div></form></dialog>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
