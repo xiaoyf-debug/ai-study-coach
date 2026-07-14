@@ -7,7 +7,6 @@ const iso = (date = new Date()) => date.toISOString().slice(0, 10);
 const escapeHtml = (value = "") => String(value).replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[c]);
 
 const demoTopics = [
-  {id: crypto.randomUUID(), subject:"程序设计", chapter:"数组与循环边界", importance:5, mastery:2, difficulty:2, minutes:45, prerequisite:"", tags:["基础","易错"], questionCount:2, collectedCount:1, learned:false},
   {id: crypto.randomUUID(), subject:"程序设计", chapter:"链表与动态内存", importance:4, mastery:2, difficulty:5, minutes:120, prerequisite:"", tags:["综合题"], questionCount:1, collectedCount:1, learned:false},
 ];
 const saved = JSON.parse(localStorage.getItem(KEY) || "null");
@@ -15,7 +14,7 @@ const state = saved || {topics: demoTopics, dailyMinutes:90, sync:null};
 if (!Array.isArray(state.topics)) state.topics = [];
 const removedTopicIds = new Set(
   state.topics
-    .filter(topic => topic.subject === "程序设计" && topic.chapter === "指针与数组")
+    .filter(topic => topic.subject === "程序设计" && ["数组与循环边界", "指针与数组"].includes(topic.chapter))
     .map(topic => topic.id),
 );
 state.topics = state.topics.filter(topic => !removedTopicIds.has(topic.id));
