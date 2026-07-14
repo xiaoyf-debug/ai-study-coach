@@ -1,0 +1,13 @@
+.brand-mark {
+  background: linear-gradient(145deg, var(--blue), #5277f2);
+  box-shadow: 0 6px 14px #315be82b;
+}
+
+.brand-mark svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
