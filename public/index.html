@@ -3,45 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI 学习规划与复盘助手</title>
+  <meta name="description" content="分析知识点重要程度、安排学习先后顺序，并根据掌握情况生成复习路径。">
+  <title>AI 学习路径规划师</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header><div><span class="eyebrow">AI STUDY COACH</span><h1>把目标变成今天能完成的行动</h1><p>制定计划、记录专注过程，并根据真实完成情况持续复盘。</p></div><span id="modeBadge" class="badge">在线演示 · 本地模式</span></header>
+  <header class="topbar">
+    <a class="brand" href="#overview"><span class="brand-mark">路</span><span>学习路径规划师<small>STUDY PATH COACH</small></span></a>
+    <nav><a href="#summer-plan">暑假计划</a><a href="#priority">优先级</a><a href="#path">学习路径</a><a href="#review">复习计划</a></nav>
+    <button class="ghost compact" id="exportData">导出规划</button>
+  </header>
+
   <main>
-    <section class="panel hero-panel">
-      <div><h2>本周目标</h2><p id="goalPreview">还没有设置目标</p></div>
-      <button id="openGoal">制定学习计划</button>
+    <section class="hero" id="overview">
+      <div>
+        <span class="eyebrow">从“学什么”到“什么时候复习”</span>
+        <h1>把零散资料，变成一条<br><em>有依据的学习路径</em></h1>
+        <p>综合考试重要度、薄弱程度、前置依赖、遗忘风险和截止时间，自动决定先学什么、后学什么。</p>
+        <div class="hero-actions"><button id="openTopic">添加知识点</button><button class="ghost" id="openImport">导入现有资料</button></div>
+      </div>
+      <div class="score-card">
+        <span>当前最优先</span><strong id="topPriority">等待添加知识点</strong><div class="score-ring" id="topScore">--</div>
+        <p id="topReason">添加或导入资料后，系统会解释排序依据。</p>
+      </div>
     </section>
 
-    <div class="metrics">
-      <article><strong id="completionRate">0%</strong><span>今日完成率</span></article>
-      <article><strong id="focusMinutes">0</strong><span>累计专注分钟</span></article>
-      <article><strong id="streakDays">0</strong><span>连续记录天数</span></article>
-    </div>
+    <section class="metrics">
+      <article><span>知识点</span><strong id="topicCount">0</strong><small>已纳入分析</small></article>
+      <article><span>高优先级</span><strong id="urgentCount">0</strong><small>建议尽快处理</small></article>
+      <article><span>待复习</span><strong id="reviewCount">0</strong><small>今天及已逾期</small></article>
+      <article><span>预计投入</span><strong id="totalHours">0h</strong><small>剩余学习时间</small></article>
+    </section>
 
-    <div class="layout">
-      <section class="panel">
-        <div class="section-title"><div><span class="eyebrow">TODAY</span><h2>今日任务</h2></div><button class="secondary" id="addTask">添加任务</button></div>
-        <div id="taskList" class="task-list"></div>
-      </section>
-      <aside class="panel coach-card">
-        <span class="eyebrow">COACH</span><h2>学习教练建议</h2>
-        <p id="coachText">先设置一个具体目标，我会根据任务和记录给出下一步建议。</p>
-        <button id="refreshAdvice">生成建议</button>
-      </aside>
-    </div>
+    <section class="section summer-plan" id="summer-plan">
+      <div class="section-head summer-head">
+        <div><span class="eyebrow">8-WEEK SOFTWARE ENGINEERING BOOTCAMP</span><h2>准大二软工暑假学习计划</h2><p>主线：开发工具基本功 → Python → 工程化 → 独立项目。每天约 2.5～3 小时，第 7 天用于轻量复盘和休息。</p></div>
+        <div class="plan-progress"><strong id="planProgress">0%</strong><span id="planProgressText">0 / 56 天</span></div>
+      </div>
+      <div class="plan-controls">
+        <label>Day 1 开始日期<input id="planStartDate" type="date"></label>
+        <div id="weekTabs" class="week-tabs" aria-label="按周筛选"></div>
+        <button class="ghost compact" id="jumpToday">定位今日</button>
+      </div>
+      <div class="plan-overview">
+        <article><b>第 1–2 周</b><span>Terminal · Git · GDB · CMake</span></article>
+        <article><b>第 3–4 周</b><span>Python · 测试 · 工程规范</span></article>
+        <article><b>第 5 周</b><span>SQL · GitHub 协作 · 软件设计</span></article>
+        <article><b>第 6–8 周</b><span>课程任务管理器项目</span></article>
+      </div>
+      <div id="dailyPlanList" class="daily-plan-list"></div>
+    </section>
 
-    <section class="panel">
-      <div class="section-title"><div><span class="eyebrow">REVIEW</span><h2>学习记录与复盘</h2></div><button class="secondary" id="addSession">记录学习</button></div>
-      <div id="sessionList" class="session-list"></div>
-      <div class="summary"><h3>阶段总结</h3><p id="summaryText">完成学习记录后，这里会汇总投入时间、完成情况和下一步重点。</p></div>
+    <section class="section" id="priority">
+      <div class="section-head"><div><span class="eyebrow">PRIORITY MATRIX</span><h2>重要程度与学习顺序</h2><p>分数越高越应优先；点击知识点可更新掌握度或完成学习。</p></div><div class="legend"><i class="high"></i>优先 <i class="mid"></i>正常 <i class="low"></i>稍后</div></div>
+      <div class="toolbar"><input id="searchTopic" placeholder="搜索学科、章节或标签"><select id="subjectFilter"><option value="">全部学科</option></select><select id="sortMode"><option value="score">按优先级</option><option value="dependency">按前置顺序</option><option value="mastery">按薄弱程度</option></select></div>
+      <div id="priorityList" class="priority-list"></div>
+    </section>
+
+    <section class="section" id="path">
+      <div class="section-head"><div><span class="eyebrow">OPTIMAL PATH</span><h2>最佳学习路径</h2><p id="pathSummary">系统会先安排前置基础，再穿插重点练习与主动回忆。</p></div><label class="minutes">每日可用 <input id="dailyMinutes" type="number" min="15" step="15" value="90"> 分钟</label></div>
+      <div id="pathList" class="timeline"></div>
+    </section>
+
+    <section class="section" id="review">
+      <div class="section-head"><div><span class="eyebrow">SPACED REVIEW</span><h2>复习路径</h2><p>按掌握度动态采用 1、3、7、14、30 天间隔，并优先处理错题集中的章节。</p></div><button class="ghost" id="refreshReview">重新计算</button></div>
+      <div id="reviewList" class="review-grid"></div>
+    </section>
+
+    <section class="section resource-section" id="resources">
+      <div><span class="eyebrow">KNOWLEDGE BASE</span><h2>关联现有学习资料</h2><p>兼容“知识笔记库”导出的 JSON（notes + questions）。导入后会按学科与章节合并，并把重点题、错题数量纳入优先级。</p><div class="sync-state"><span id="syncDot"></span><span id="syncText">尚未同步资料库</span></div></div>
+      <div class="resource-actions"><button id="importNotes">选择知识库 JSON</button><button class="ghost" id="openLocalNotes">打开本地资料库</button><input id="notesFile" type="file" accept="application/json,.json" hidden><small>线上网页受浏览器安全策略限制，不能自动读取 file:/// 数据；请先在资料库中“导出数据”，再在这里导入。</small></div>
     </section>
   </main>
 
-  <dialog id="goalDialog"><form method="dialog"><h2>制定学习计划</h2><label>学习目标<input id="goalTitle" placeholder="例如：两周内掌握 C++ 指针与结构体"></label><label>截止日期<input id="goalDeadline" type="date"></label><label>每日可用时间（分钟）<input id="dailyMinutes" type="number" min="15" value="90"></label><label>当前基础<textarea id="goalContext" placeholder="描述已经掌握的内容和主要困难"></textarea></label><div class="actions"><button value="cancel" class="secondary">取消</button><button value="default" id="saveGoal">生成计划</button></div></form></dialog>
-  <dialog id="taskDialog"><form method="dialog"><h2>添加任务</h2><label>任务内容<input id="taskTitle" placeholder="例如：完成 5 道指针练习题"></label><label>预计用时（分钟）<input id="taskMinutes" type="number" min="5" value="30"></label><div class="actions"><button value="cancel" class="secondary">取消</button><button value="default" id="saveTask">保存任务</button></div></form></dialog>
-  <dialog id="sessionDialog"><form method="dialog"><h2>记录本次学习</h2><label>学习内容<input id="sessionTitle" placeholder="例如：复习数组与指针"></label><label>实际用时（分钟）<input id="sessionMinutes" type="number" min="1" value="30"></label><label>掌握情况<select id="sessionStatus"><option>掌握良好</option><option>基本理解</option><option>仍需复习</option></select></label><label>学习记录<textarea id="sessionNote" placeholder="记录收获、问题或下一步行动"></textarea></label><div class="actions"><button value="cancel" class="secondary">取消</button><button value="default" id="saveSession">保存记录</button></div></form></dialog>
+  <dialog id="topicDialog"><form method="dialog" id="topicForm"><div class="dialog-head"><div><span class="eyebrow">TOPIC PROFILE</span><h2 id="topicDialogTitle">添加知识点</h2></div><button value="cancel" class="icon-btn" aria-label="关闭">×</button></div><input id="topicId" type="hidden"><div class="form-grid"><label>学科<input id="topicSubject" required placeholder="例如：程序设计"></label><label>章节 / 知识点<input id="topicChapter" required placeholder="例如：指针与数组"></label><label>考试重要度 <output id="importanceOutput">4</output><input id="topicImportance" type="range" min="1" max="5" value="4"></label><label>当前掌握度 <output id="masteryOutput">2</output><input id="topicMastery" type="range" min="1" max="5" value="2"></label><label>学习难度 <output id="difficultyOutput">3</output><input id="topicDifficulty" type="range" min="1" max="5" value="3"></label><label>预计用时（分钟）<input id="topicMinutes" type="number" min="10" value="60"></label><label class="wide">前置知识<select id="topicPrerequisite"><option value="">无前置知识</option></select></label><label class="wide">标签（逗号分隔）<input id="topicTags" placeholder="必考, 易错, 基础"></label></div><div class="dialog-actions"><button type="button" class="danger hidden" id="deleteTopic">删除</button><span></span><button value="cancel" class="ghost">取消</button><button type="submit" id="saveTopic">保存并分析</button></div></form></dialog>
+
+  <dialog id="importDialog"><form method="dialog"><div class="dialog-head"><div><span class="eyebrow">IMPORT</span><h2>导入现有资料</h2></div><button value="cancel" class="icon-btn">×</button></div><div class="import-steps"><b>1</b><p>打开桌面知识笔记库，点击左侧“导出数据”。</p><b>2</b><p>回到本页选择导出的 <code>study-notes-日期.json</code>。</p><b>3</b><p>系统按“学科 + 章节”生成知识点，并分析错题与重点标记。</p></div><div class="dialog-actions"><span></span><button value="cancel" class="ghost">稍后</button><button type="button" id="chooseImport">选择 JSON</button></div></form></dialog>
+
+  <div id="toast" role="status"></div>
   <script type="module" src="app.js"></script>
 </body>
 </html>
