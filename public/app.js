@@ -8,14 +8,23 @@ const escapeHtml = (value = "") => String(value).replace(/[&<>'"]/g, c => ({"&":
 
 const demoTopics = [
   {id: crypto.randomUUID(), subject:"程序设计", chapter:"数组与循环边界", importance:5, mastery:2, difficulty:2, minutes:45, prerequisite:"", tags:["基础","易错"], questionCount:2, collectedCount:1, learned:false},
-  {id: crypto.randomUUID(), subject:"程序设计", chapter:"指针与数组", importance:5, mastery:1, difficulty:4, minutes:90, prerequisite:"", tags:["必考","核心"], questionCount:3, collectedCount:2, learned:false},
   {id: crypto.randomUUID(), subject:"程序设计", chapter:"链表与动态内存", importance:4, mastery:2, difficulty:5, minutes:120, prerequisite:"", tags:["综合题"], questionCount:1, collectedCount:1, learned:false},
 ];
 const saved = JSON.parse(localStorage.getItem(KEY) || "null");
 const state = saved || {topics: demoTopics, dailyMinutes:90, sync:null};
 if (!Array.isArray(state.topics)) state.topics = [];
+const removedTopicIds = new Set(
+  state.topics
+    .filter(topic => topic.subject === "程序设计" && topic.chapter === "指针与数组")
+    .map(topic => topic.id),
+);
+state.topics = state.topics.filter(topic => !removedTopicIds.has(topic.id));
+state.topics.forEach(topic => {
+  if (removedTopicIds.has(topic.prerequisite)) topic.prerequisite = "";
+});
 if (!state.planStartDate) state.planStartDate = iso();
 if (!Array.isArray(state.planCompleted)) state.planCompleted = [];
+if (removedTopicIds.size) save();
 let selectedWeek = 0;
 
 function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
