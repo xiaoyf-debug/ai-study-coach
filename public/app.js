@@ -1,6 +1,6 @@
 import { summerPlan, weekNames } from "./summer-plan.js";
 
-const KEY = "ai-study-coach-v2";
+const KEY = "ai-study-coach-v3-hello-agents";
 const DAY = 86400000;
 const $ = (id) => document.getElementById(id);
 const iso = (date = new Date()) => date.toISOString().slice(0, 10);
@@ -132,5 +132,5 @@ document.addEventListener('click',e=>{const week=e.target.closest('[data-week]')
 $('dailyMinutes').value=state.dailyMinutes;$('dailyMinutes').onchange=()=>{state.dailyMinutes=Number($('dailyMinutes').value)||90;save();renderPath();};$('refreshReview').onclick=()=>{renderReviews();toast('复习计划已按最新掌握度更新');};
 $('exportData').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`study-path-${iso()}.json`});a.click();URL.revokeObjectURL(a.href);};
 $('planStartDate').onchange=()=>{state.planStartDate=$('planStartDate').value||iso();save();renderSummerPlan();};
-$('jumpToday').onclick=()=>{const start=new Date(`${state.planStartDate}T00:00:00`),now=new Date();const day=Math.floor((new Date(now.getFullYear(),now.getMonth(),now.getDate())-start)/DAY)+1;if(day<1||day>summerPlan.length){toast('今天不在当前 8 周计划范围内');return;}selectedWeek=Math.ceil(day/7);renderSummerPlan();requestAnimationFrame(()=>$(`plan-day-${day}`)?.scrollIntoView({behavior:'smooth',block:'center'}));};
+$('jumpToday').onclick=()=>{const start=new Date(`${state.planStartDate}T00:00:00`),now=new Date();const day=Math.floor((new Date(now.getFullYear(),now.getMonth(),now.getDate())-start)/DAY)+1;if(day<1||day>summerPlan.length){toast('今天不在当前 21 天计划范围内');return;}selectedWeek=summerPlan[day-1].week;renderSummerPlan();requestAnimationFrame(()=>$(`plan-day-${day}`)?.scrollIntoView({behavior:'smooth',block:'center'}));};
 render();
